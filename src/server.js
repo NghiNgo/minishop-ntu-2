@@ -27,6 +27,20 @@ function requireLogin(req, res, next) {
   return next();
 }
 
+/*
+ * Điểm cuối chỉ dành cho kiểm thử tự động: đặt lại dữ liệu về trạng thái ban đầu.
+ * Chỉ hoạt động khi biến môi trường MINISHOP_TEST_MODE=1, nên không thể gọi
+ * trên môi trường thật. Playwright tự bật biến này (xem playwright.config.js).
+ */
+app.post('/api/test/reset', (req, res) => {
+  if (process.env.MINISHOP_TEST_MODE !== '1') {
+    return res.status(404).json({ message: 'Không tìm thấy' });
+  }
+  store.datLaiDuLieu();
+  for (const token of Object.keys(sessions)) delete sessions[token];
+  return res.json({ message: 'Đã đặt lại dữ liệu' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', app: 'MiniShop NTU', version: '1.1.0' });
 });

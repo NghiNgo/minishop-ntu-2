@@ -17,6 +17,7 @@
 | Git | bất kỳ bản gần đây | `git --version` |
 | Visual Studio Code | bản mới | — |
 | Tiện ích ESLint cho VS Code | của Microsoft (`dbaeumer.vscode-eslint`) | — |
+| Trình duyệt cho Playwright (từ Buổi 5) | tải bằng `npx playwright install chromium` | `npx playwright test tests/vi-du-e2e` |
 
 ## 2. Cài đặt và chạy
 
@@ -55,6 +56,9 @@ Dữ liệu lưu trong bộ nhớ: **khởi động lại server là mọi dữ 
 | `npm test` | Chạy toàn bộ ca kiểm thử đơn vị (Jest) |
 | `npm run coverage` | Chạy kiểm thử kèm đo bao phủ, báo cáo ở `coverage/lcov-report/index.html` |
 | `npm run test:watch` | Tự chạy lại mỗi khi lưu file |
+| `npm run e2e` | Chạy bộ kiểm thử tự động giao diện (Playwright) |
+| `npm run e2e:report` | Mở báo cáo HTML của lần chạy E2E gần nhất |
+| `npm run e2e:codegen` | Ghi thao tác trên trình duyệt thành mã kiểm thử |
 
 Đổi cổng khi cổng 3000 bị chiếm:
 - Command Prompt: `set PORT=3001 && npm start`
@@ -72,7 +76,11 @@ minishop-ntu/
 ├── tests/
 │   ├── vi-du/             Ví dụ minh họa Jest (không sửa)
 │   ├── helpers/           Tiện ích đọc dữ liệu kiểm thử (không sửa)
-│   └── unit/              Ca kiểm thử đơn vị do sinh viên viết
+│   ├── unit/              Ca kiểm thử đơn vị do sinh viên viết
+│   ├── vi-du-e2e/         Ví dụ minh họa Playwright (không sửa)
+│   ├── pages/             Page Object cho các màn hình
+│   └── e2e/               Ca kiểm thử đầu cuối do sinh viên viết
+├── playwright.config.js   Cấu hình Playwright (không sửa)
 ├── public/                Giao diện web (HTML, CSS, JS)
 ├── src/
 │   ├── server.js          Máy chủ Express + REST API

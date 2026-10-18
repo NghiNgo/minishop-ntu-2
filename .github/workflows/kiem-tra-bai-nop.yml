@@ -8,7 +8,7 @@ on:
 jobs:
   kiem-tra:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Lấy mã nguồn (đầy đủ lịch sử để so sánh với main)
         uses: actions/checkout@v4
@@ -23,6 +23,12 @@ jobs:
 
       - name: Cài thư viện
         run: npm ci
+
+      # Từ Buổi 5 cần trình duyệt cho Playwright. Bước này chỉ chạy khi
+      # nhánh bài nộp là buoi-05 trở đi, để các buổi trước không bị chậm.
+      - name: Cài trình duyệt cho Playwright
+        if: startsWith(github.head_ref, 'buoi-05') || startsWith(github.head_ref, 'buoi-06')
+        run: npx playwright install --with-deps chromium
 
       - name: Kiểm tra quy định nộp bài
         run: node scripts/kiem-tra-nop-bai.js
