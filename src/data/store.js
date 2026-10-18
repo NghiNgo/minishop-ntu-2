@@ -10,26 +10,30 @@ const products = [
   { id: 7, name: 'Áo khoác gió NTU', price: 450000, category: 'qua-luu-niem', stock: 3 },
 ];
 
-const users = [
-  {
-    email: 'sv@ntu.edu.vn',
-    password: 'Matkhau123',
-    fullName: 'Nguyễn Văn Sinh Viên',
-    age: 20,
-    type: 'THUONG',
-    failedAttempts: 0,
-    locked: false,
-  },
-  {
-    email: 'vip@ntu.edu.vn',
-    password: 'Matkhau123',
-    fullName: 'Trần Thị Thân Thiết',
-    age: 35,
-    type: 'VIP',
-    failedAttempts: 0,
-    locked: false,
-  },
-];
+function nguoiDungBanDau() {
+  return [
+    {
+      email: 'sv@ntu.edu.vn',
+      password: 'Matkhau123',
+      fullName: 'Nguyễn Văn Sinh Viên',
+      age: 20,
+      type: 'THUONG',
+      failedAttempts: 0,
+      locked: false,
+    },
+    {
+      email: 'vip@ntu.edu.vn',
+      password: 'Matkhau123',
+      fullName: 'Trần Thị Thân Thiết',
+      age: 35,
+      type: 'VIP',
+      failedAttempts: 0,
+      locked: false,
+    },
+  ];;
+}
+
+const users = nguoiDungBanDau();
 
 const carts = {}; // email -> [{ productId, qty }]
 const orders = []; // { id, email, items, subtotal, shippingFee, total, status }
@@ -42,4 +46,16 @@ function findProduct(id) {
   return products.find((p) => p.id === Number(id));
 }
 
-module.exports = { products, users, carts, orders, findUser, findProduct };
+/*
+ * Đặt lại toàn bộ dữ liệu về trạng thái ban đầu.
+ * Chỉ dùng cho kiểm thử tự động: mỗi ca kiểm thử cần bắt đầu từ trạng thái sạch,
+ * nếu không thứ tự chạy sẽ quyết định kết quả.
+ */
+function datLaiDuLieu() {
+  for (const email of Object.keys(carts)) delete carts[email];
+  orders.length = 0;
+  users.length = 0;
+  users.push(...nguoiDungBanDau());
+}
+
+module.exports = { products, users, carts, orders, findUser, findProduct, datLaiDuLieu };

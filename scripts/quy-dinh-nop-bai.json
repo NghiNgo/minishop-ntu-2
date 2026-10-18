@@ -97,5 +97,36 @@
         "lenh": "node scripts/kiem-tra-buoi04.js"
       }
     ]
+  },
+  "buoi-05": {
+    "moTa": "Buổi 5 – Kiểm thử tự động giao diện với Playwright (bài cá nhân)",
+    "duocSua": [
+      "tests/e2e/01-luong-chinh.spec.js",
+      "tests/e2e/02-flaky.spec.js",
+      "tests/e2e/03-pom.spec.js",
+      "tests/e2e/04-loc-san-pham.spec.js",
+      "tests/pages/ProductPage.js",
+      "tests/pages/CartPage.js",
+      "tests/pages/LoginPage.js",
+      "bai-nop/Buoi05-BaoCaoE2E.md",
+      "bai-nop/Buoi05-Flaky-POM.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "tests/e2e/01-luong-chinh.spec.js",
+      "tests/e2e/02-flaky.spec.js",
+      "tests/e2e/03-pom.spec.js",
+      "tests/e2e/04-loc-san-pham.spec.js",
+      "tests/pages/ProductPage.js",
+      "tests/pages/CartPage.js",
+      "bai-nop/Buoi05-BaoCaoE2E.md",
+      "bai-nop/Buoi05-Flaky-POM.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 5",
+        "lenh": "node scripts/kiem-tra-buoi05.js"
+      }
+    ]
   }
 }

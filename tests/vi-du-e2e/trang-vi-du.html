@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang ví dụ — Đăng ký lớp học phần</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 560px; margin: 32px auto; padding: 0 16px; }
+    label { display: block; margin-bottom: 12px; }
+    input, select { display: block; width: 100%; padding: 7px; margin-top: 4px; }
+    button { padding: 8px 16px; margin-right: 8px; }
+    .thong-bao { margin-top: 16px; padding: 10px; border-radius: 4px; }
+    .ok { background: #e6f4ea; color: #1a7f37; }
+    .loi { background: #fdecea; color: #c62828; }
+    #ket-qua { margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 6px; border-bottom: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h1>Đăng ký lớp học phần</h1>
+
+  <label>Mã số sinh viên
+    <input id="mssv" name="mssv" type="text">
+  </label>
+  <label>Học phần
+    <select id="hoc-phan" name="hocPhan">
+      <option value="">-- Chọn học phần --</option>
+      <option value="SOT357">SOT357 — Kiểm thử phần mềm</option>
+      <option value="INS305">INS305 — Hệ hỗ trợ quyết định</option>
+    </select>
+  </label>
+  <button id="btn-dang-ky">Đăng ký</button>
+  <button id="btn-tai-ds">Tải danh sách</button>
+
+  <div id="thong-bao" role="status"></div>
+  <div id="ket-qua"></div>
+
+<script>
+  const ds = [];
+  const $ = (id) => document.getElementById(id);
+
+  $('btn-dang-ky').onclick = () => {
+    const mssv = $('mssv').value.trim();
+    const hp = $('hoc-phan').value;
+    const tb = $('thong-bao');
+    if (!/^\d{8}$/.test(mssv)) {
+      tb.className = 'thong-bao loi';
+      tb.textContent = 'MSSV phải gồm đúng 8 chữ số';
+      return;
+    }
+    if (!hp) {
+      tb.className = 'thong-bao loi';
+      tb.textContent = 'Vui lòng chọn học phần';
+      return;
+    }
+    ds.push({ mssv, hp });
+    tb.className = 'thong-bao ok';
+    tb.textContent = 'Đăng ký thành công học phần ' + hp;
+  };
+
+  // Cố ý trả kết quả sau một độ trễ NGẪU NHIÊN để minh họa ca kiểm thử flaky
+  $('btn-tai-ds').onclick = () => {
+    $('ket-qua').textContent = 'Đang tải...';
+    const treHan = 200 + Math.floor(Math.random() * 1500);
+    setTimeout(() => {
+      $('ket-qua').innerHTML = ds.length === 0
+        ? '<p id="ds-rong">Chưa có đăng ký nào.</p>'
+        : '<table id="bang-ds"><tr><th>MSSV</th><th>Học phần</th></tr>' +
+          ds.map((d) => `<tr><td>${d.mssv}</td><td>${d.hp}</td></tr>`).join('') + '</table>';
+    }, treHan);
+  };
+</script>
+</body>
+</html>
