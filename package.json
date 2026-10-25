@@ -14,7 +14,10 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
-    "e2e:codegen": "playwright codegen http://localhost:3000"
+    "e2e:codegen": "playwright codegen http://localhost:3000",
+    "test:ai": "jest tests/gen-ai --testPathIgnorePatterns=/node_modules/",
+    "api": "playwright test tests/api",
+    "coverage:ai": "jest tests/gen-ai --coverage --collectCoverageFrom=src/services/shipping.js --testPathIgnorePatterns=/node_modules/"
   },
   "engines": {
     "node": ">=18.18"
@@ -41,6 +44,10 @@
       "text",
       "lcov",
       "json-summary"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/gen-ai/"
     ]
   }
 }

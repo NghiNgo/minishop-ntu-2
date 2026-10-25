@@ -18,6 +18,7 @@
 | Visual Studio Code | bản mới | — |
 | Tiện ích ESLint cho VS Code | của Microsoft (`dbaeumer.vscode-eslint`) | — |
 | Trình duyệt cho Playwright (từ Buổi 5) | tải bằng `npx playwright install chromium` | `npx playwright test tests/vi-du-e2e` |
+| GitHub Actions bật trên repo cá nhân (từ Buổi 6) | — | Tab **Actions** của repo hiện được lần chạy |
 
 ## 2. Cài đặt và chạy
 
@@ -59,6 +60,11 @@ Dữ liệu lưu trong bộ nhớ: **khởi động lại server là mọi dữ 
 | `npm run e2e` | Chạy bộ kiểm thử tự động giao diện (Playwright) |
 | `npm run e2e:report` | Mở báo cáo HTML của lần chạy E2E gần nhất |
 | `npm run e2e:codegen` | Ghi thao tác trên trình duyệt thành mã kiểm thử |
+| `npm run api` | Chạy bộ kiểm thử API (Playwright, không mở trình duyệt) |
+| `npm run test:ai` | Chạy riêng bộ ca do Gen-AI sinh ra ở `tests/gen-ai/` (Buổi 6 Phần 3) |
+| `npm run coverage:ai` | Chạy bộ ca đó kèm đo bao phủ `src/services/shipping.js` |
+
+> **Lưu ý về `tests/gen-ai/`.** Thư mục này bị `testPathIgnorePatterns` trong `package.json` loại khỏi `npm test` **một cách có chủ ý**: đó là bộ ca chưa được kiểm chứng, dùng làm dữ liệu phản biện ở Buổi 6 Phần 3, và không được phép làm nhiễu quy trình kiểm thử tự động. Muốn chạy nó thì dùng `npm run test:ai`.
 
 Đổi cổng khi cổng 3000 bị chiếm:
 - Command Prompt: `set PORT=3001 && npm start`
@@ -69,7 +75,9 @@ Dữ liệu lưu trong bộ nhớ: **khởi động lại server là mọi dữ 
 
 ```
 minishop-ntu/
-├── .github/               Mẫu Pull Request + kiểm tra tự động (GitHub Actions)
+├── .github/
+│   ├── ISSUE_TEMPLATE/    Mẫu báo cáo lỗi (Buổi 4)
+│   └── workflows/         Kiểm tra bài nộp + quy trình kiểm thử đầy đủ (Buổi 6)
 ├── docs/                  Tài liệu: SRS, đề bài từng buổi, hướng dẫn nộp bài
 ├── bai-nop/               Mẫu bài nộp (sinh viên điền vào)
 ├── scripts/               Script kiểm tra bài nộp (không sửa)
@@ -77,9 +85,12 @@ minishop-ntu/
 │   ├── vi-du/             Ví dụ minh họa Jest (không sửa)
 │   ├── helpers/           Tiện ích đọc dữ liệu kiểm thử (không sửa)
 │   ├── unit/              Ca kiểm thử đơn vị do sinh viên viết
-│   ├── vi-du-e2e/         Ví dụ minh họa Playwright (không sửa)
+│   ├── vi-du-e2e/         Ví dụ minh họa Playwright giao diện (không sửa)
+│   ├── vi-du-api/         Ví dụ minh họa kiểm thử API (không sửa)
 │   ├── pages/             Page Object cho các màn hình
-│   └── e2e/               Ca kiểm thử đầu cuối do sinh viên viết
+│   ├── e2e/               Ca kiểm thử đầu cuối do sinh viên viết
+│   ├── api/               Ca kiểm thử API do sinh viên viết (Buổi 6)
+│   └── gen-ai/            Bộ ca do Gen-AI sinh, ngoài `npm test` (Buổi 6)
 ├── playwright.config.js   Cấu hình Playwright (không sửa)
 ├── public/                Giao diện web (HTML, CSS, JS)
 ├── src/
@@ -102,7 +113,7 @@ minishop-ntu/
 | GET | `/api/cart` | Xem giỏ hàng | Có |
 | POST | `/api/cart` | Thêm/cập nhật `{productId, qty}` | Có |
 | DELETE | `/api/cart/:productId` | Xóa sản phẩm khỏi giỏ | Có |
-| POST | `/api/shipping-fee` | Tính phí `{zone: "noi-thanh" \| "ngoai-thanh"}` | Có |
+| POST | `/api/shipping-fee` | Tính phí cho giỏ hiện tại `{zone: "noi-thanh" \| "ngoai-thanh"}` | Có |
 | POST | `/api/orders` | Đặt hàng `{zone}` | Có |
 | GET | `/api/orders` | Danh sách đơn của tôi | Có |
 | DELETE | `/api/orders/:id` | Hủy đơn | Có |
@@ -119,3 +130,4 @@ Các API cần đăng nhập nhận header `Authorization: Bearer <token>`.
 | `npm install` báo lỗi mạng/`ETIMEDOUT` | Kiểm tra Internet/proxy của phòng máy, báo giảng viên để nhận gói cài đặt ngoại tuyến |
 | ESLint báo `Could not find config file` | Phải chạy lệnh trong thư mục gốc `minishop-ntu` |
 | Tiếng Việt bị lỗi font trong terminal Windows | Chạy `chcp 65001` trước |
+| `fatal: Need to specify how to reconcile divergent branches` khi kéo tài liệu mới | Nhánh `main` cá nhân đã rẽ khỏi repo gốc sau khi gộp các nhánh `buoi-0x`. Dùng `git pull --no-rebase upstream main`, hoặc đặt một lần `git config pull.rebase false` |

@@ -52,7 +52,7 @@ function doc(file, cot, ten) {
   let noiDung;
   try {
     noiDung = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
-  } catch (e) {
+  } catch {
     loi.push(`${ten}: file KHÔNG phải UTF-8 (nhiều khả năng đã lưu bằng Excel ở dạng ANSI/Windows-1258) nên tiếng Việt sẽ bị hỏng. Mở lại bằng Google Sheets rồi tải về dạng "Comma-separated values (.csv)", hoặc trong Excel chọn "CSV UTF-8 (Comma delimited)".`);
     return null;
   }
