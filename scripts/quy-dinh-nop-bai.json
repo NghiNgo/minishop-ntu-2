@@ -128,5 +128,32 @@
         "lenh": "node scripts/kiem-tra-buoi05.js"
       }
     ]
+  },
+  "buoi-06": {
+    "moTa": "Buổi 6 – Kiểm thử API, tích hợp liên tục và tổng kết (bài cá nhân)",
+    "duocSua": [
+      "tests/api/01-xac-thuc.spec.js",
+      "tests/api/02-nghiep-vu.spec.js",
+      "tests/gen-ai/ai-sinh.test.js",
+      ".github/workflows/kiem-thu-day-du.yml",
+      "bai-nop/Buoi06-BaoCaoAPI-CI.md",
+      "bai-nop/Buoi06-GenAI.md",
+      "bai-nop/Buoi06-TongKet.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "tests/api/01-xac-thuc.spec.js",
+      "tests/api/02-nghiep-vu.spec.js",
+      ".github/workflows/kiem-thu-day-du.yml",
+      "bai-nop/Buoi06-BaoCaoAPI-CI.md",
+      "bai-nop/Buoi06-GenAI.md",
+      "bai-nop/Buoi06-TongKet.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 6",
+        "lenh": "node scripts/kiem-tra-buoi06.js"
+      }
+    ]
   }
 }
