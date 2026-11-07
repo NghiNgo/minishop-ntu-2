@@ -124,10 +124,16 @@ if (ton_tai('bai-nop/Buoi06-TongKet.md')) {
 
 // ---------- 5. Chạy toàn bộ bộ kiểm thử ----------
 const fileKq = path.join(GOC, 'ket-qua-buoi06.json');
-const chay = spawnSync('npx', ['playwright', 'test', 'tests/api', '--reporter=json'], {
-  cwd: GOC, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
-  env: { ...process.env, PLAYWRIGHT_JSON_OUTPUT_NAME: fileKq, CI: '1' },
-});
+const lenhNpx = process.platform === 'win32'
+  ? spawnSync('cmd.exe', ['/d', '/c', 'npx', 'playwright', 'test', 'tests/api', '--reporter=json'], {
+      cwd: GOC, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
+      env: { ...process.env, PLAYWRIGHT_JSON_OUTPUT_NAME: fileKq, CI: '1' },
+    })
+  : spawnSync('npx', ['playwright', 'test', 'tests/api', '--reporter=json'], {
+      cwd: GOC, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
+      env: { ...process.env, PLAYWRIGHT_JSON_OUTPUT_NAME: fileKq, CI: '1' },
+    });
+const chay = lenhNpx;
 if (!fs.existsSync(fileKq)) {
   loi.push('Không chạy được kiểm thử API: ' + String(chay.stderr || chay.stdout || '').split('\n').slice(-5).join(' | '));
 } else {
