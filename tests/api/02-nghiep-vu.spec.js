@@ -1,14 +1,6 @@
 /*
- * BUỔI 6 — PHẦN 1B
- * Kiểm thử API tầng nghiệp vụ: giỏ hàng, đơn hàng và bộ lọc sản phẩm.
- *
- * Bốn ca đầu đã được viết sẵn làm mẫu cho ba nhóm kiểm tra:
- *   - ca âm trả về 4xx kèm thông báo;
- *   - quy tắc nghiệp vụ trong thân phản hồi;
- *   - tác dụng phụ, kiểm bằng một lời gọi API thứ hai.
- *
- * Nhiệm vụ của sinh viên: hoàn thành TODO (5) đến TODO (12).
- * Không mở trình duyệt trong file này — chỉ dùng fixture `request`.
+ * BUOI 6 - PHAN 1B
+ * Kiem thu API tang nghiep vu: gio hang, don hang va loc san pham.
  */
 const { test, expect } = require('@playwright/test');
 const { datLaiDuLieu } = require('../helpers/dat-lai-du-lieu');
@@ -29,24 +21,21 @@ test.beforeEach(async ({ request }) => {
   token = await dangNhap(request);
 });
 
-// ---------------------------------------------------------------
-// GIỎ HÀNG — ca mẫu
-// ---------------------------------------------------------------
-test('FR-03.2 — thêm sản phẩm với số lượng 0 trả về 400', async ({ request }) => {
+test('FR-03.2 - them san pham voi so luong 0 tra ve 400', async ({ request }) => {
   const res = await request.post('/api/cart', { ...kemToken(), data: { productId: 3, qty: 0 } });
 
   expect(res.status()).toBe(400);
   expect((await res.json()).message).toContain('Số lượng phải là số nguyên từ 1 đến 99');
 });
 
-test('FR-03.6 — thêm sản phẩm không tồn tại trả về 404', async ({ request }) => {
+test('FR-03.6 - them san pham khong ton tai tra ve 404', async ({ request }) => {
   const res = await request.post('/api/cart', { ...kemToken(), data: { productId: 999, qty: 1 } });
 
   expect(res.status()).toBe(404);
   expect((await res.json()).message).toBe('Sản phẩm không tồn tại');
 });
 
-test('FR-03.3 — thêm lại sản phẩm đã có thì CẬP NHẬT số lượng, không cộng dồn', async ({ request }) => {
+test('FR-03.3 - them lai san pham thi cap nhat so luong', async ({ request }) => {
   await request.post('/api/cart', { ...kemToken(), data: { productId: 3, qty: 2 } });
   const res = await request.post('/api/cart', { ...kemToken(), data: { productId: 3, qty: 5 } });
 
@@ -54,11 +43,10 @@ test('FR-03.3 — thêm lại sản phẩm đã có thì CẬP NHẬT số lư�
   const gio = (await res.json()).cart;
   expect(gio.items).toHaveLength(1);
   expect(gio.items[0].qty).toBe(5);
-  expect(gio.subtotal).toBe(250000); // 5 × 50.000đ
+  expect(gio.subtotal).toBe(250000);
 });
 
-// Ca mẫu về TÁC DỤNG PHỤ: lời gọi thứ hai mới kiểm được trạng thái sau đó.
-test('FR-05.1 — đặt hàng thành công thì giỏ hàng được làm trống', async ({ request }) => {
+test('FR-05.1 - dat hang thanh cong thi lam trong gio hang', async ({ request }) => {
   await request.post('/api/cart', { ...kemToken(), data: { productId: 3, qty: 1 } });
   await request.post('/api/orders', { ...kemToken(), data: { zone: 'noi-thanh' } });
 
@@ -67,66 +55,86 @@ test('FR-05.1 — đặt hàng thành công thì giỏ hàng được làm trố
   expect(gio.subtotal).toBe(0);
 });
 
-// ---------------------------------------------------------------
-// TODO (5): FR-03.5 — xóa một sản phẩm KHÔNG có trong giỏ phải trả về 404.
-//   Gọi DELETE /api/cart/3 khi giỏ đang trống.
-// ---------------------------------------------------------------
+test('FR-03.5 - xoa san pham khong co trong gio tra ve 404', async ({ request }) => {
+  const res = await request.delete('/api/cart/3', kemToken());
 
-// ---------------------------------------------------------------
-// TODO (6): FR-05.1 — đặt hàng khi giỏ TRỐNG phải trả về 400 kèm thông báo
-//   'Giỏ hàng đang trống'.
-// ---------------------------------------------------------------
+  expect(res.status()).toBe(404);
+  expect((await res.json()).message).toBe('Sản phẩm không có trong giỏ');
+});
 
-// ---------------------------------------------------------------
-// TODO (7): FR-05.2 — kiểm công thức tổng tiền của đơn hàng.
-//   Thêm sản phẩm 4 (350.000đ) vào giỏ, tạo đơn với zone 'noi-thanh'.
-//   Phản hồi phải là 201. Trong thân phản hồi, kiểm từng thành phần:
-//     subtotal = 350000; discount = 0; shippingFee = 20000;
-//   và quan trọng nhất là quan hệ giữa chúng:
-//     total === subtotal - discount + shippingFee
-//   Viết dòng cuối theo đúng dạng quan hệ đó, đừng viết số cứng: khi ca
-//   thất bại, thông báo sẽ cho thấy ngay phép tính nào bị sai.
-// ---------------------------------------------------------------
+test('FR-05.1 - dat hang khi gio trong tra ve 400', async ({ request }) => {
+  const res = await request.post('/api/orders', { ...kemToken(), data: { zone: 'noi-thanh' } });
 
-// ---------------------------------------------------------------
-// TODO (8): FR-05.3 + FR-04.3 — thành viên VIP.
-//   Đăng nhập 'vip@ntu.edu.vn' bằng dangNhap(request, 'vip@ntu.edu.vn'),
-//   dùng kemToken(tokenVip) cho mọi lời gọi. Thêm sản phẩm 4, tạo đơn với
-//   zone 'ngoai-thanh'. Kiểm discount = 5% của tạm tính, shippingFee = 0,
-//   và total đúng theo công thức.
-//   Lưu ý khi phân tích kết quả: ca này có thể XANH trong khi TODO (7) ĐỎ.
-//   Hãy giải thích hiện tượng đó trong báo cáo.
-// ---------------------------------------------------------------
+  expect(res.status()).toBe(400);
+  expect((await res.json()).message).toBe('Giỏ hàng đang trống');
+});
 
-// ---------------------------------------------------------------
-// TODO (9): FR-05.5 — hủy một đơn hàng KHÔNG tồn tại.
-//   DELETE /api/orders/9999 phải trả về 404.
-// ---------------------------------------------------------------
+test('FR-05.2 - thanh vien thuong tinh tong tien dung cong thuc', async ({ request }) => {
+  await request.post('/api/cart', { ...kemToken(), data: { productId: 4, qty: 1 } });
+  const res = await request.post('/api/orders', { ...kemToken(), data: { zone: 'noi-thanh' } });
 
-// ---------------------------------------------------------------
-// TODO (10): FR-05.5 — hủy LẠI một đơn đã hủy.
-//   Tạo đơn, hủy lần một (phải được 200), hủy lần hai phải trả về 409.
-// ---------------------------------------------------------------
+  expect(res.status()).toBe(201);
+  const don = await res.json();
+  expect(don.subtotal).toBe(350000);
+  expect(don.discount).toBe(0);
+  expect(don.shippingFee).toBe(20000);
+  expect(don.total).toBe(don.subtotal - don.discount + don.shippingFee);
+});
 
-// ---------------------------------------------------------------
-// TODO (11): FR-06.5 và FR-06.6 — bộ lọc sản phẩm. Viết hai ca:
-//   (a) GET /api/products?sapXep=gia-giam — danh sách trả về phải được
-//       sắp xếp giảm dần theo price. Cách kiểm không phụ thuộc dữ liệu:
-//       so mảng giá với chính nó sau khi sắp xếp giảm dần.
-//   (b) GET /api/products?conHang=co — danh sách không rỗng, và MỌI phần
-//       tử phải có stock > 0. Dùng vòng lặp để kiểm từng phần tử.
-// ---------------------------------------------------------------
+test('FR-05.3 + FR-04.3 - VIP tinh giam gia va mien phi van chuyen', async ({ request }) => {
+  const tokenVip = await dangNhap(request, 'vip@ntu.edu.vn');
+  await request.post('/api/cart', { ...kemToken(tokenVip), data: { productId: 4, qty: 1 } });
+  const res = await request.post('/api/orders', { ...kemToken(tokenVip), data: { zone: 'ngoai-thanh' } });
 
-// ---------------------------------------------------------------
-// TODO (12): FR-06.7 — tổ hợp nhiều tiêu chí trong một lời gọi.
-//   GET /api/products?danhMuc=do-dung-hoc-tap&khoangGia=duoi-100k
-//   Kiểm danh sách tên sản phẩm trả về đúng bằng tập mong đợi suy ra từ
-//   dữ liệu mẫu trong SRS v1.2. Sắp xếp tên trước khi so để ca không phụ
-//   thuộc thứ tự trả về.
-// ---------------------------------------------------------------
+  expect(res.status()).toBe(201);
+  const don = await res.json();
+  const discount = Math.round(don.subtotal * 0.05);
+  expect(don.discount).toBe(discount);
+  expect(don.shippingFee).toBe(0);
+  expect(don.total).toBe(don.subtotal - don.discount + don.shippingFee);
+});
 
-// Dòng dưới chỉ để file khung chạy được; xóa nó khi đã làm xong các TODO.
-test('TODO: thay khối này bằng các ca ở TODO (5) đến TODO (12)', async ({ request }) => {
-  expect(typeof dangNhap).toBe('function');
-  expect((await request.get('/api/products')).status()).toBe(200);
+test('FR-05.5 - huy don khong ton tai tra ve 404', async ({ request }) => {
+  const res = await request.delete('/api/orders/9999', kemToken());
+
+  expect(res.status()).toBe(404);
+  expect((await res.json()).message).toBe('Không tìm thấy đơn hàng');
+});
+
+test('FR-05.5 - huy lai don da huy tra ve 409', async ({ request }) => {
+  await request.post('/api/cart', { ...kemToken(), data: { productId: 3, qty: 1 } });
+  const tao = await request.post('/api/orders', { ...kemToken(), data: { zone: 'noi-thanh' } });
+  const don = await tao.json();
+
+  const lanMot = await request.delete(`/api/orders/${don.id}`, kemToken());
+  expect(lanMot.status()).toBe(200);
+  const lanHai = await request.delete(`/api/orders/${don.id}`, kemToken());
+  expect(lanHai.status()).toBe(409);
+  expect((await lanHai.json()).message).toContain('Chỉ hủy được đơn ở trạng thái Chờ xác nhận');
+});
+
+test('FR-06.5 - sap xep san pham theo gia giam dan', async ({ request }) => {
+  const res = await request.get('/api/products?sapXep=gia-giam');
+  expect(res.status()).toBe(200);
+  const danhSach = await res.json();
+  const gia = danhSach.map((p) => p.price);
+  expect(gia).toEqual(gia.slice().sort((a, b) => b - a));
+});
+
+test('FR-06.6 - chi hien san pham con hang', async ({ request }) => {
+  const res = await request.get('/api/products?conHang=co');
+  expect(res.status()).toBe(200);
+  const danhSach = await res.json();
+  expect(danhSach.length).toBeGreaterThan(0);
+  for (const sanPham of danhSach) {
+    expect(sanPham.stock).toBeGreaterThan(0);
+  }
+});
+
+test('FR-06.7 - to hop danh muc va khoang gia', async ({ request }) => {
+  const res = await request.get('/api/products?danhMuc=do-dung-hoc-tap&khoangGia=duoi-100k');
+  expect(res.status()).toBe(200);
+  const danhSach = await res.json();
+  const ten = danhSach.map((p) => p.name).sort();
+  expect(ten).toEqual(['Bút ký NTU', 'Sổ tay sinh viên'].sort());
 });

@@ -1,15 +1,13 @@
 # BUỔI 6 – PHẢN BIỆN CA KIỂM THỬ DO GEN-AI SINH RA
 
-<!-- CHUA_DIEN: xóa dòng này sau khi đã điền xong file -->
-
 - **Họ tên:**
-- **MSSV:**
+- **MSSV:** 65133295
 
 ## 1. Nguồn bộ ca được phản biện
 
 Đánh dấu một lựa chọn:
 
-- [ ] Dùng bộ ca có sẵn trong `docs/Buoi06-TestCaseDoAISinh.md`, đã chép vào `tests/gen-ai/ai-sinh.test.js`
+- [x] Dùng bộ ca có sẵn trong `docs/Buoi06-TestCaseDoAISinh.md`, đã chép vào `tests/gen-ai/ai-sinh.test.js`
 - [ ] Tự sinh bằng công cụ: …………… (ghi rõ tên công cụ, phiên bản và câu lệnh đã dùng)
 
 Nếu tự sinh, dán nguyên văn câu lệnh và kết quả vào phụ lục cuối file. Số ca phải từ 8 trở lên.
@@ -22,24 +20,24 @@ Nếu tự sinh, dán nguyên văn câu lệnh và kết quả vào phụ lục 
 
 | Mã ca | Dự đoán (xanh/đỏ) | Kết quả thật | Lệch? |
 |---|---|---|---|
-| AI-01 | | | |
-| AI-02 | | | |
-| AI-03 | | | |
-| AI-04 | | | |
-| AI-05 | | | |
-| AI-06 | | | |
-| AI-07 | | | |
-| AI-08 | | | |
-| AI-09 | | | |
-| AI-10 | | | |
-| AI-11 | | | |
+| AI-01 | xanh | xanh | Không lệch |
+| AI-02 | xanh | xanh | Không lệch |
+| AI-03 | xanh | xanh | Không lệch |
+| AI-04 | xanh | xanh | Không lệch |
+| AI-05 | xanh | xanh | Không lệch |
+| AI-06 | xanh | xanh | Không lệch |
+| AI-07 | xanh | xanh | Không lệch |
+| AI-08 | xanh | xanh | Không lệch |
+| AI-09 | xanh | xanh | Không lệch |
+| AI-10 | đỏ | đỏ | Không lệch: AI sai kết quả mong đợi |
+| AI-11 | đỏ | đỏ | Không lệch: AI sai kết quả mong đợi |
 
 | Chỉ số | Giá trị |
 |---|---|
-| Tổng số ca | |
-| Số ca đạt | |
-| Số ca thất bại | |
-| Số ca dự đoán đúng | |
+| Tổng số ca | 11 |
+| Số ca đạt | 9 |
+| Số ca thất bại | 2 |
+| Số ca dự đoán đúng | 11 |
 
 ## 3. Phản biện từng ca
 
@@ -54,19 +52,19 @@ Hai lưu ý khi phân loại: một ca **đỏ** không tự động là `SAI K�
 
 | Mã ca | Phân loại | Giải thích | Căn cứ (SRS v1.2 hoặc mã nguồn) |
 |---|---|---|---|
-| AI-01 | | | |
-| AI-02 | | | |
-| AI-03 | | | |
-| AI-04 | | | |
-| AI-05 | | | |
-| AI-06 | | | |
-| AI-07 | | | |
-| AI-08 | | | |
-| AI-09 | | | |
-| AI-10 | | | |
-| AI-11 | | | |
+| AI-01 | ĐÚNG | Nội thành 200.000đ trả 20.000đ đúng quy tắc thường | FR-04.1 |
+| AI-02 | ĐÚNG | Ngoại thành 200.000đ trả 35.000đ đúng quy tắc thường | FR-04.1 |
+| AI-03 | THỪA | Trùng lớp đơn thường nội thành với AI-01 và AI-04 | FR-04.1 |
+| AI-04 | THỪA | Trùng lớp đơn thường nội thành với AI-01 và AI-03 | FR-04.1 |
+| AI-05 | ĐÚNG | Tạm tính 600.000đ đạt ngưỡng miễn phí | FR-04.2 |
+| AI-06 | ĐÚNG | 499.999đ nằm dưới ngưỡng miễn phí, phải trả 20.000đ | FR-04.2 |
+| AI-07 | ĐÚNG | VIP được miễn phí ở mọi khu vực và tạm tính | FR-04.3 |
+| AI-08 | LUÔN XANH | `toBeGreaterThanOrEqual(0)` không phát hiện số bị đặt sai | FR-04.1 |
+| AI-09 | LUÔN XANH | `toBeDefined()` không kiểm giá trị nghiệp vụ | FR-04.1 |
+| AI-10 | SAI KẾT QUẢ | Mã khu vực không hợp lệ phải bị từ chối, không mặc định 20.000đ | FR-04.1 và shipping.js dòng 11-13 |
+| AI-11 | SAI KẾT QUẢ | Đơn 0đ không thuộc quy tắc miễn phí; thiếu tạm tính 500.000đ mới miễn phí | FR-04.2 |
 
-**Tổng hợp:** ĐÚNG …… / SAI KẾT QUẢ …… / THỪA …… / LUÔN XANH ……
+**Tổng hợp:** ĐÚNG 5 / SAI KẾT QUẢ 2 / THỪA 2 / LUÔN XANH 2
 
 ## 4. Những gì AI bỏ sót
 
@@ -74,10 +72,10 @@ Hai lưu ý khi phân loại: một ca **đỏ** không tự động là `SAI K�
 
 | Trường hợp bị bỏ sót | Căn cứ trong SRS v1.2 | Hậu quả nếu không kiểm |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+| Biên đúng ngưỡng 500.000đ | FR-04.2 | Bỏ sót trường hợp miễn phí bắt đầu đúng ngưỡng |
+| Ngoại thành VIP | FR-04.3 | Không kiểm tổ hợp VIP + ngoại thành |
+| Nội thành và ngoại thành ở ngưỡng 500.000đ | FR-04.1 và FR-04.2 | Bỏ tổ hợp miễn phí theo khu vực |
+| Tạm tính âm, NaN hoặc kiểu dữ liệu sai | SRS dữ liệu số hợp lệ | Có thể bỏ sót lỗi định dạng đầu vào |
 
 ## 5. Kiểm chứng lời tuyên bố của AI
 
@@ -87,21 +85,31 @@ AI khẳng định bộ ca của nó *"đạt 100% độ bao phủ câu lệnh v
 
 | Chỉ số | AI tuyên bố | Đo được thực tế |
 |---|---|---|
-| Bao phủ câu lệnh | 100% | |
-| Bao phủ nhánh | (không nêu) | |
-| Dòng chưa được phủ | (không nêu) | |
+| Bao phủ câu lệnh | 100% | 91,66% |
+| Bao phủ nhánh | (không nêu) | 81,81% |
+| Dòng chưa được phủ | (không nêu) | Dòng 15: kiểm tra subtotal không hợp lệ |
 
 **5.1.** Nhận xét về độ tin cậy của lời tuyên bố này:
 
+Lời tuyên bố “100% bao phủ câu lệnh” là sai so với số đo thực tế 91,66% câu lệnh. Bộ ca cũng có hai ca sai kết quả và hai ca luôn xanh; vì vậy bao phủ dòng/nhánh không chứng minh chất lượng.
+
 **5.2.** Trong bộ ca này có ca thuộc nhãn `LUÔN XANH`. Những ca đó có làm **tăng** độ bao phủ hay không? Điều đó nói lên hạn chế gì của việc dùng độ bao phủ làm thước đo chất lượng bộ kiểm thử?
+
+AI-08 và AI-09 có thể tăng/duy trì độ bao phủ bằng cách gọi hàm và đi qua nhánh nhưng không tạo điều kiện phủ theo dữ liệu; các khẳng định không thể phát hiện mã sai. Bao phủ chỉ đo phần mã đã chạy, không đo độ chính xác của kỳ vọng.
 
 ## 6. Kết luận
 
 **6.1.** Trong 11 ca, bao nhiêu ca **dùng được ngay**, bao nhiêu ca **phải sửa**, bao nhiêu ca **nên bỏ**? Tính tỷ lệ dùng được. Viết thêm 4–6 dòng như một nhận xét review nếu nhận bộ ca này từ một đồng nghiệp mới vào nghề.
 
+Dùng được ngay 5 ca (AI-01, AI-02, AI-05, AI-06, AI-07), 2 ca phải sửa (AI-10, AI-11), 4 ca nên bỏ hoặc gộp (AI-03, AI-04, AI-08, AI-09): tỷ lệ dùng được 5/11 = 45,45%. Có thể nhận bộ ca làm điểm xuất phát nhưng không được merge nguyên trạng. Hai ca đỏ còn lại là hallucination: hệ thống đúng theo SRS, bộ ca mới sai.
+
 **6.2.** Giữa hai việc — tự viết bộ ca từ đầu, và sửa bộ ca do AI sinh ra — việc nào mất ít công hơn cho hàm `calcShippingFee`? Trả lời **có số liệu** (số ca phải đọc, số ca phải sửa, số ca phải viết thêm), không trả lời theo cảm nhận.
 
+Trong trường hợp này sửa bộ AI nhanh hơn: phải đọc/phân loại 11 ca, sửa 2 ca sai kết quả, bỏ 4 ca thừa/luôn xanh và viết thêm ít nhất ca biên 500.000đ hoặc tổ hợp VIP ngoại thành. Viết lại từ đầu cũng cần các ca tương tự và ít nhất 8 ca, nên sửa có lợi nếu làm checklist review trước khi thêm.
+
 **6.3.** Mục 0.3 của đề bài đã loại `tests/gen-ai/` khỏi `npm test`. Sau khi phản biện xong, nêu **điều kiện cụ thể** để một bộ ca do AI sinh ra được phép đưa vào quy trình tự động.
+
+Bộ ca được phép chỉ khi từng ca đã đối chiếu SRS/mã nguồn và được người review chấp nhận, không còn `LUÔN XANH`/thừa, kết quả mong đợi độc lập, chạy xanh nhiều lần và tạo issue cho mọi lỗi thật. Sau đó mới chuyển sang thư mục chính và chạy trong Jest/CI.
 
 ## Phụ lục (nếu tự sinh bộ ca)
 
